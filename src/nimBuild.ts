@@ -123,3 +123,20 @@ export function buildAndRun(filename: string): void {
         outputWindow.show(2);
     });
 }
+
+export function build(filename: string): void {
+    let config = vscode.workspace.getConfiguration('nim');
+    var args = ['compile', '--listFullPaths', '--lineDir:on', '--debuginfo', filename];
+    var cwd = vscode.workspace.rootPath;
+    cp.execFile(getNimExecPath(), args, { cwd: cwd }, (err, stdout, stderr) => {
+        if (err && (<any>err).code == "ENOENT") {
+            vscode.window.showInformationMessage("No 'nim' binary could be found in PATH: '" + process.env["PATH"] + "'");
+            return;
+        }
+        var outputWindow = vscode.window.createOutputChannel("Nim Run Output");
+        outputWindow.append(stderr.toString());
+        outputWindow.append(stdout.toString());
+        // display window in the second position (side or bottom)
+        outputWindow.show(2);
+    });
+}

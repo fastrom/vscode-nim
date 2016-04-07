@@ -108,7 +108,7 @@ export function execNimSuggest(suggestType: NimSuggestType, filename: string,
 
         socket.on("error", err => {
             if (err.code === "ECONNREFUSED") {
-                closeNimSuggestProcess(filename);
+                //closeNimSuggestProcess(filename);
                 resolved = true;
                 resolve([]);
             }

@@ -15,7 +15,7 @@ import { NimReferenceProvider } from './nimReferences';
 import { NimDocumentSymbolProvider, NimWorkspaceSymbolProvider } from './nimOutline';
 import * as indexer from './nimIndexer';
 import { NimSignatureHelpProvider } from './nimSignature';
-import { check, buildAndRun, ICheckResult } from './nimBuild';
+import { check, buildAndRun, build, ICheckResult } from './nimBuild';
 import { offerToInstallTools } from './nimInstallTools'
 import { NIM_MODE } from './nimMode'
 import { showHideStatus } from './nimStatus'
@@ -69,6 +69,11 @@ export function activate(ctx: vscode.ExtensionContext): void {
         buildAndRun(config['project'] || vscode.window.activeTextEditor.document.fileName);
     }));
 
+    ctx.subscriptions.push(vscode.commands.registerCommand('nim.build', () => {
+        let config = vscode.workspace.getConfiguration('nim');
+        build(config['project'] || vscode.window.activeTextEditor.document.fileName);
+    }));
+    
     if (vscode.window.activeTextEditor) {
         let nimConfig = vscode.workspace.getConfiguration('nim');
         runBuilds(vscode.window.activeTextEditor.document, nimConfig);
